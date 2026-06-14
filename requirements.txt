@@ -1,0 +1,11 @@
+Django>=6.0
+djangorestframework
+psycopg2-binary
+django-cors-headers
+channels
+channels-redis
+daphne
+asgiref
+gunicorn
+whitenoise
+python-decouple
