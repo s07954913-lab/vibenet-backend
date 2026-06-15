@@ -15,13 +15,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         await self.channel_layer.group_send(self.group_name, {
-            'type':    'chat_message',
-            'message': data.get('message', ''),
-            'sender':  data.get('sender', ''),
+            'type':        'chat_message',
+            'text':        data.get('text', ''),
+            'sender_id':   data.get('sender_id', ''),
+            'sender_name': data.get('sender_name', ''),
         })
 
     async def chat_message(self, event):
-        await self.send(text_data=json.dumps(event))
+        await self.send(text_data=json.dumps({
+            'text':        event.get('text', ''),
+            'sender_id':   event.get('sender_id', ''),
+            'sender_name': event.get('sender_name', ''),
+        }))
 
 
 class CommentConsumer(AsyncWebsocketConsumer):
@@ -40,6 +45,7 @@ class CommentConsumer(AsyncWebsocketConsumer):
             'type':      'new_comment',
             'text':      data.get('text', ''),
             'user_name': data.get('user_name', ''),
+            'user_id':   data.get('user_id', ''),
         })
 
     async def new_comment(self, event):
